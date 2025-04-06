@@ -1,0 +1,49 @@
+.div-search-card {
+    top:10%;
+    display: flex;
+    justify-content: center;
+}
+
+.div-search-card input{
+    all: unset;
+    padding: 5px;
+    height: 3vh;
+    width: 30%;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    box-shadow: 
+        inset 0px 0px 5px #555555,
+        0px 0px 5px #ffffff;
+    font-size: 1rem;
+    transition: box-shadow 0.5s;
+}
+
+.div-search-card input:focus {
+    /* border: 1px solid #ff0000; */
+    box-shadow: 
+        inset 0px 0px 5px rgba(85, 85, 85, 0),  /* fade out */
+        0px 0px 5px #870093;       /* fade in */
+    /* outline: 1px solid #870093; */
+}
+
+.div-deck-build {
+    display: flex;
+}
+.div-card-img {
+    top: 20%;
+    left: 1%;
+    background-color: beige;
+    /* position: fixed; */
+    width: min(40vh, 400px);;
+    height: min(60vh, 1000px);;
+    margin: 10px 10px 10px 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-deck-list {
+    background-color: chocolate;
+    /* height: min(60vh,1500px); */
+    width: min(80vw,1400px);
+    margin: 10px;
+}
