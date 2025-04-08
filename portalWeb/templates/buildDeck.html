@@ -6,8 +6,13 @@
 <br>
 <br>
 <div class="div-search-card">
-    <input>
+    <!-- <label for="card-search">Digite a carta:</label> -->
+    <input id="card-input" placeholder="Digite a carta:">
 </div>
+<div class="div-card-result" hidden>
+</div>
+<br>
+<br>
 <div class="div-deck-build">
     <div class="div-card-img">
 
@@ -16,4 +21,16 @@
 
     </div>
 </div>
+
+<script>
+    document.getElementById("card-input").addEventListener('input', function (){
+
+        const cardName = this.value;
+
+        if(cardName.length > 3){
+            console.log('Input!');
+        }
+
+    });
+</script>
 {% endblock %}
