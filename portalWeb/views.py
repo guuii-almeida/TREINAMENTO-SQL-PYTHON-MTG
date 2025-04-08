@@ -24,5 +24,4 @@ def searchCard(request, cardInput):
         return JsonResponse({'error': 'Not a single card was found!'}, status=400)
 
 def buildDeck(request):
-    
     return render(request,'buildDeck.html')
