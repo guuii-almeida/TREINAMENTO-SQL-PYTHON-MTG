@@ -5,11 +5,14 @@
 {% block content %}
 <br>
 <br>
-<div class="div-search-card">
-    <!-- <label for="card-search">Digite a carta:</label> -->
-    <input id="card-input" placeholder="Enter a card name:">
+<div class="div-search">
+    <div class="div-search-card">
+        <!-- <label for="card-search">Digite a carta:</label> -->
+        <input id="card-input" placeholder="Enter a card name:">
+        <div id="div-card-result" style="position: relative; width: 100%;" hidden>
+    </div>
 </div>
-<div id="div-card-result" hidden>
+
 </div>
 <br>
 <br>
@@ -22,4 +25,110 @@
     </div>
 </div>
  
+<style>
+    .div-search{
+        display: flex;
+        place-content: center;
+        height: 3vh;
+    }
+
+    .div-search-card {
+    top: 10%;
+    display: flex;
+    justify-content: center;
+    width: 30vw;
+    flex-wrap: wrap;
+}
+
+.div-search-card input{
+    all: unset;
+    padding: 5px;
+    height: 3vh;
+    width: 30vw;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    box-shadow: inset 0px 0px 5px #555555,
+        0px 0px 5px #ffffff;
+    font-size: 1rem;
+    transition: box-shadow 0.5s;
+}
+
+.div-search-card input:focus {
+    /* border: 1px solid #ff0000; */
+    box-shadow: 
+        inset 0px 0px 5px rgba(85, 85, 85, 0),  /* fade out */
+        0px 0px 5px #870093;       /* fade in */
+    /* outline: 1px solid #870093; */
+}
+
+.div-deck-build {
+    display: flex;
+}
+.div-card-img {
+    top: 20%;
+    left: 1%;
+    background-color: beige;
+    /* position: fixed; */
+    width: min(40vh, 400px);;
+    height: min(60vh, 1000px);;
+    margin: 10px 10px 10px 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-deck-list {
+    background-color: chocolate;
+    /* height: min(60vh,1500px); */
+    width: min(80vw,1400px);
+    margin: 10px;
+}
+</style>
+<script>
+
+document.getElementById('card-input').addEventListener('input', function () {
+    const cardName = this.value.trim();
+    const cardResult = document.getElementById('div-card-result');
+
+    if (cardName.length > 2) {
+        fetch(`/searchCard/${encodeURIComponent(cardName)}/`)
+            .then(response => response.json())
+            .then(data => {
+                cardResult.innerHTML = '';
+
+                if (data.error) {
+                    cardResult.innerHTML = `<p style="color:red;">${data.error}</p>`;
+                } else if (data.cardNamesList && data.cardNamesList.length > 0) {
+                    cardResult.removeAttribute('hidden');
+
+                    data.cardNamesList.forEach(name => {
+                        const a = document.createElement('a');
+                        a.textContent = name;
+                        a.href = "#";
+                        a.classList.add("card-result-link");
+
+                        a.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            fetch(`/selectCard/${encodeURIComponent(name)}/`)
+                                .then(res => res.json())               
+                                document.getElementById('card-input').value = '';
+                                document.getElementById('div-card-result').innerHTML = '';
+                        });
+
+                        cardResult.appendChild(a);
+                    });
+
+                } else {
+                    cardResult.removeAttribute('hidden');
+                    cardResult.innerHTML = `<p>Not a single card was found!</p>`;
+                }
+            });
+
+    } else {
+        cardResult.innerHTML = '';
+        cardResult.setAttribute('hidden', true);
+    }
+});
+
+</script>
+
 {% endblock %}

@@ -1,18 +1,19 @@
 .div-search-card {
-    top:10%;
+    top: 10%;
     display: flex;
     justify-content: center;
+    width: 30vw;
+    flex-wrap: wrap;
 }
 
 .div-search-card input{
     all: unset;
     padding: 5px;
     height: 3vh;
-    width: 30%;
+    width: 30vw;
     border: 1px solid #555555;
     border-radius: 5px;
-    box-shadow: 
-        inset 0px 0px 5px #555555,
+    box-shadow: inset 0px 0px 5px #555555,
         0px 0px 5px #ffffff;
     font-size: 1rem;
     transition: box-shadow 0.5s;
