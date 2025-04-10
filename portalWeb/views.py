@@ -16,11 +16,23 @@ def searchCard(request, cardInput):
         dataCard = res.json()
 
         cardNamesList = [card['name'] for card in dataCard['data'][:5]]
-        print(cardNamesList)
+
+        firstCard = dataCard['data'][0]
+        cardPNG = None
+
+        if 'image_uris' in firstCard:
+            cardPNG = firstCard['image_uris']['png']
+        elif 'card_faces' in firstCard and 'image_uris' in firstCard['card_faces'][0]:
+            cardPNG = firstCard['card_faces'][0]['image_uris']['png']
+
+        print(cardPNG)
+
         return JsonResponse({
             'cardNamesList': cardNamesList,
+            'cardPNG': cardPNG,
         })
     except Exception as e:
+        print("Erro:", e)
         return JsonResponse({'error': 'Not a single card was found!'}, status=400)
 
 def buildDeck(request):

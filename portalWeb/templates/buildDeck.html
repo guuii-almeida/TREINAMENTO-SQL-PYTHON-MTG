@@ -9,7 +9,7 @@
     <div class="div-search-card">
         <!-- <label for="card-search">Digite a carta:</label> -->
         <input id="card-input" placeholder="Enter a card name:">
-        <div id="div-card-result" style="position: relative; width: 100%;" hidden>
+        <div id="div-card-result" style="position: relative; width: 100%; display: flex;flex-wrap: wrap;" hidden>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
 <br>
 <br>
 <div class="div-deck-build">
-    <div class="div-card-img">
+    <div id="div-card-img">
 
     </div>
     <div class="div-deck-list">
@@ -94,6 +94,15 @@ document.getElementById('card-input').addEventListener('input', function () {
             .then(response => response.json())
             .then(data => {
                 cardResult.innerHTML = '';
+                const cardDIV = document.getElementById('div-card-img');
+                cardDIV.innerHTML = '';
+
+                if (data.cardPNG) {
+                    const img = document.createElement('img');
+                    img.src = data.cardPNG;
+                    img.alt = 'Card Image';
+                    cardDIV.appendChild(img);
+                }
 
                 if (data.error) {
                     cardResult.innerHTML = `<p style="color:red;">${data.error}</p>`;
