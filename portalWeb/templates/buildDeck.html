@@ -9,7 +9,15 @@
     <div class="div-search-card">
         <!-- <label for="card-search">Digite a carta:</label> -->
         <input id="card-input" placeholder="Enter a card name:">
-        <div id="div-card-result" style="position: relative; width: 100%; display: flex;flex-wrap: wrap;" hidden>
+        <div id="div-card-result" style="
+        border: none;
+        background-color: white;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        max-height: 100px;
+        overflow: auto;" hidden>
     </div>
 </div>
 
@@ -64,16 +72,17 @@
 .div-deck-build {
     display: flex;
 }
-.div-card-img {
+#div-card-img {
     top: 20%;
     left: 1%;
     background-color: beige;
     /* position: fixed; */
-    width: min(40vh, 400px);;
-    height: min(60vh, 1000px);;
+    width: min(40vh, 300px);;
+    height: min(60vh, 600px);;
     margin: 10px 10px 10px 20px;
     justify-content: center;
     align-items: center;
+    padding: 10px;
 }
 
 .div-deck-list {
@@ -97,33 +106,54 @@ document.getElementById('card-input').addEventListener('input', function () {
                 const cardDIV = document.getElementById('div-card-img');
                 cardDIV.innerHTML = '';
 
-                if (data.cardPNG) {
-                    const img = document.createElement('img');
-                    img.src = data.cardPNG;
-                    img.alt = 'Card Image';
-                    cardDIV.appendChild(img);
-                }
-
                 if (data.error) {
                     cardResult.innerHTML = `<p style="color:red;">${data.error}</p>`;
-                } else if (data.cardNamesList && data.cardNamesList.length > 0) {
+                } else if (data.cards && data.cards.length > 0) {
                     cardResult.removeAttribute('hidden');
+                    cardResult.style.border = '2px solid red';
+                    
+                    
+                    if (data.cards[0].img) {
+                        const img = document.createElement('img');
+                        img.src = data.cards[0].img;
+                        img.alt = 'Card Image';
+                        img.style.maxWidth = '300px';
+                        cardDIV.appendChild(img);
+                    }
 
-                    data.cardNamesList.forEach(name => {
+
+                    data.cards.forEach(card => {
                         const a = document.createElement('a');
-                        a.textContent = name;
+                        a.textContent = card.name;
                         a.href = "#";
+                        a.style.width = '100%';
                         a.classList.add("card-result-link");
+                        a.setAttribute('data-img', card.image);
 
                         a.addEventListener('click', function (e) {
                             e.preventDefault();
-                            fetch(`/selectCard/${encodeURIComponent(name)}/`)
+                            fetch(`/selectCard/${encodeURIComponent(card.name)}/`)
                                 .then(res => res.json())               
-                                document.getElementById('card-input').value = '';
-                                document.getElementById('div-card-result').innerHTML = '';
+                                cardResult.value = '';
+                                cardResult.innerHTML = '';
+                                cardResult.style.border = 'none';
+                        });
+
+                        a.addEventListener('mouseover', function () {
+                            if (card.img) {
+                                cardDIV.innerHTML = '';
+                                const img = document.createElement('img');
+                                img.src = card.img;
+                                img.alt = 'Card Image';
+                                img.style.maxWidth = '300px';
+                                cardDIV.appendChild(img);
+                            }
+                            
                         });
 
                         cardResult.appendChild(a);
+                        
+
                     });
 
                 } else {
@@ -135,9 +165,11 @@ document.getElementById('card-input').addEventListener('input', function () {
     } else {
         cardResult.innerHTML = '';
         cardResult.setAttribute('hidden', true);
+        cardResult.style.border = 'none';
     }
 });
 
 </script>
+
 
 {% endblock %}

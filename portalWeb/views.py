@@ -15,21 +15,23 @@ def searchCard(request, cardInput):
         res = requests.get(f'https://api.scryfall.com/cards/search?q={cardInput}')
         dataCard = res.json()
 
-        cardNamesList = [card['name'] for card in dataCard['data'][:5]]
+        cards = []
+        for card in dataCard['data'][:15]:
+            cardName = card['name']
+            cardPNG = None
+            if 'image_uris' in card:
+                cardPNG = card['image_uris']['png']
+            elif 'card_faces' in card and 'image_uris' in card['card_faces'][0]:
+                cardPNG = card['card_faces'][0]['image_uris']['png']
 
-        firstCard = dataCard['data'][0]
-        cardPNG = None
-
-        if 'image_uris' in firstCard:
-            cardPNG = firstCard['image_uris']['png']
-        elif 'card_faces' in firstCard and 'image_uris' in firstCard['card_faces'][0]:
-            cardPNG = firstCard['card_faces'][0]['image_uris']['png']
-
-        print(cardPNG)
-
+            cards.append({'name':cardName, 'img':cardPNG
+            })
+            # print(cards)
+            # print(cards['name'])
         return JsonResponse({
-            'cardNamesList': cardNamesList,
-            'cardPNG': cardPNG,
+            'cards': cards,
+            # 'cardNamesList': cardNamesList,
+            # 'cardPNG': cardPNG,
         })
     except Exception as e:
         print("Erro:", e)
