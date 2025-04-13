@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.db import connection
 import requests
 from time import sleep
 # Create your views here.
@@ -38,4 +39,8 @@ def searchCard(request, cardInput):
         return JsonResponse({'error': 'Not a single card was found!'}, status=400)
 
 def buildDeck(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM CARD;")
+        consulta = cursor.fetchall()
+        print(consulta)
     return render(request,'buildDeck.html')
