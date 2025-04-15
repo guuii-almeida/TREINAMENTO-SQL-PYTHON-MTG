@@ -128,15 +128,24 @@ document.getElementById('card-input').addEventListener('input', function () {
                         a.href = "#";
                         a.style.width = '100%';
                         a.classList.add("card-result-link");
-                        a.setAttribute('data-img', card.image);
+                        // a.setAttribute('data-img', card.image);
 
                         a.addEventListener('click', function (e) {
                             e.preventDefault();
-                            fetch(`/selectCard/${encodeURIComponent(card.name)}/`)
-                                .then(res => res.json())               
-                                cardResult.value = '';
-                                cardResult.innerHTML = '';
-                                cardResult.style.border = 'none';
+                            const safeCardName = a.textContent.replaceAll('//', '___');
+                            console.log('Click',safeCardName);
+                            // Enviar dados para o backend
+                            fetch(`/selectCard/${encodeURIComponent(safeCardName)}/`)
+                            .then(res => res.json())
+                            .then(data => {
+                                // Limpar o campo de input (cardName)
+                                document.getElementById('card-input').value = '';  // Limpar o campo de texto de entrada
+                                cardResult.innerHTML = '';  // Limpar os resultados
+                                cardResult.style.border = 'none';  // Remover a borda
+                                cardResult.setAttribute('hidden', true);  // Ocultar a lista de resultados
+                            })
+                            
+                            .catch(err => console.error('Error:', err));
                         });
 
                         a.addEventListener('mouseover', function () {

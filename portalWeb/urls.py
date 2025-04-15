@@ -5,4 +5,5 @@ urlpatterns = [
    path('', views.index, name='index'),
    path('buildDeck', views.buildDeck, name='buildDeck'),
    path('searchCard/<str:cardInput>/', views.searchCard, name='searchCard'),
+   path('selectCard/<str:aCardInput>/', views.selectCard, name='selectCard'),
 ]
